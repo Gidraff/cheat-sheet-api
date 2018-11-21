@@ -1,0 +1,33 @@
+{
+  "name": "cheat-sheet-api",
+  "version": "1.0.0",
+  "description": "A simple RESTful API with Express, Nodejs, and MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gidraff/cheat-sheet-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gidraff/cheat-sheet-api/issues"
+  },
+  "homepage": "https://github.com/Gidraff/cheat-sheet-api#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.13",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
+}
