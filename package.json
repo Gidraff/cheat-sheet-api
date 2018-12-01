@@ -4,8 +4,10 @@
   "description": "A simple RESTful API with Express, Nodejs, and MongoDB.",
   "main": "index.js",
   "scripts": {
-    "test": "",
-    "start": "nodemon server.js"
+    "lint": "eslint --fix .",
+    "test": "NODE_ENV=testing jest --detectOpenHandles",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "start": "NODE_ENV=development nodemon ./src/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,15 +21,32 @@
   },
   "homepage": "https://github.com/Gidraff/cheat-sheet-api#readme",
   "dependencies": {
+    "bcrypt": "^3.0.2",
+    "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^6.1.0",
+    "email-validator": "^2.0.4",
     "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.3.13",
+    "morgan": "^1.9.1",
     "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.6"
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-equimper": "^2.2.2",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^22.1.0",
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.6",
+    "nyc": "^13.1.0",
+    "supertest": "^3.3.0"
   }
 }
