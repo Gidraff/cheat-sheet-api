@@ -1,5 +1,6 @@
 module.exports = {
   bail: true,
   verbose: true,
-  testEnvironment: 'node'
+  testEnvironment: 'node',
+  coverageReporters: ['text', 'lcov']
 }

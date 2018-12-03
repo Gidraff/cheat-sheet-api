@@ -1,32 +1,44 @@
-const User = require('../models/user.model')
-const { isEmailValid, isPasswordValid } = require('../lib/user.lib')
+const passport = require('passport')
+const jwt = require('jsonwebtoken')
 
-
-exports.register = async (req, res) => {
-  if (!isEmailValid(req.body)) {
-    return res.status(400).send({
-      error: 'Invalid Email. Try again.'
-    })
-  }
-  if (!isPasswordValid(req.body)) {
-    return res.status(400).send({
-      error: 'Invalid password.'
-    })
-  }
-
-  let user = await User.findOne({ email: req.body.email })
-  if (user) {
-    return res.status(409).json({
-      error: 'Email already taken.'
-    })
-  } else {
-    user = new User(req.body)
-    const newUser = await user.save()
-    if (newUser) {
-      return res.json({
-        message: 'Account was created.'
+exports.register = async (req, res, next) => {
+  passport.authenticate('signup', async (err, user, info) => {
+    try {
+      if(err || !user) {
+        return res.status(409).json(info)
+      }
+      req.login(user, {session: false}, async (error) => {
+        if(error) return next(error)
+        return res.status(201).send({
+          message: 'Account was successfully created',
+          user
+        })
       })
+    } catch (error) {
+      return next(error)
+    }
+  })(req, res, next)
+}
+
+exports.login = async (req, res, next) => {
+  passport.authenticate('login', async (err, user, info) => {
+    try {
+      if (err || !user) {
+        return res.status(400).json({
+          message: info
+        })
+      }
+      req.login(user, {session: false}, (err) => {
+        if (err) {
+          res.send(err)
+        }
+
+        const token = jwt.sign({ id: user.id, email: user.username}, process.env.SECRET)
+        return res.json({user: user.email, token})
+      })
+    } catch (e) {
+      return next(e)
     }
 
-  }
+  })(req, res)
 }

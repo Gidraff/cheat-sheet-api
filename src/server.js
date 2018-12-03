@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const config = require('./config/config')
 const app = express()
+const expressValidator = require('express-validator')
 
 // connect to the db
 mongoose.connect(config.url)
@@ -16,12 +17,13 @@ db.on('error', console.error.bind(
 db.once('open', function callback() {
   console.log('Successfully connected to db...')
 })
-
+require('./auth/auth')
 // set middleware
 app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(expressValidator())
 app.get('/', async(req, res) => res.send('It works'))
 
 require('./routes/user.routes')(app)
