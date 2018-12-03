@@ -6,60 +6,82 @@ const request = require('supertest')
 const expect = chai.expect
 
 describe('## Create User Account', () => {
+  beforeEach(async () => {
+    await User.create({
+      'email': 'janedoe@gmail.com',
+      'password': '123456789'
+    })
+  })
   afterEach(async() => {
     await mongoose.connection.db.dropDatabase()
   })
-  it('should respond with a string', async() => {
+  it('should respond with a 201', async() => {
     const userData = {
       email: 'babe150@gmail.com',
-      password: '12345678ddd',
-      passwordConf: '12345678ddd'
+      password: '12345678ddd'
     }
     const res = await request(app)
       .post('/api/user/register')
       .send(userData)
-    expect(res.statusCode).to.equal(200)
-    expect(res.body.message).to.equal('Account was created.')
+    expect(res.statusCode).to.equal(201)
+    expect(res.body.message).to.equal('Account was successfully created')
   })
 
-  it('fail to create if no password provided', async() => {
+  it('should respond with "Invalid Password" if invalid Password is used', async() => {
     const userData = {
       'email': 'janedoe@gmail.com',
-      'password': '',
-      'passwordConf': ''
+      'password': ''
     }
     const res = await request(app)
       .post('/api/user/register')
       .send(userData)
     expect(res.statusCode).to.equal(400)
-    expect(res.body.error).to.equal('Invalid password.')
+    expect(res.body[0].msg).to.equal('Invalid Password')
   })
 
-  it('fail to create with invalid email', async() => {
+  it('should respond with "invalid email" if invalid email is used', async() => {
     const userData = {
       'email': 'janedoegmailcom',
-      'password': '123456789',
-      'passwordConf': '123456789'
+      'password': '123456789'
     }
     const res = await request(app)
       .post('/api/user/register')
       .send(userData)
     expect(res.statusCode).to.equal(400)
-    expect(res.body.error).to.equal('Invalid Email. Try again.')
+    expect(res.body[0].msg).to.equal('Invalid Email')
   })
 
   it('fail to create duplicate account email', async() => {
-    await User.create({
-      'email': 'janedoe@gmail.com',
-      'password': '123456789',
-      'passwordConf': '123456789'
-    })
-    const res = await request(app).post('/api/user/register').send({
-      'email': 'janedoe@gmail.com',
-      'password': '123456789',
-      'passwordConf': '123456789'
-    })
+    const res = await request(app)
+      .post('/api/user/register')
+      .send({
+        'email': 'janedoe@gmail.com',
+        'password': '123456789'
+      })
     expect(res.statusCode).to.equal(409)
-    expect(res.body.error).to.equal('Email already taken.')
+    expect(res.body.message).to.equal('Email already taken')
   })
+})
+
+describe('## User Account logging', () => {
+  beforeEach(async() => {
+    await User.create({
+      'email': 'johndoe@gmail.com',
+      'password': '123456789'
+    })
+  })
+
+  afterEach(async() => {
+    await mongoose.connection.db.dropDatabase()
+  })
+
+  it('fails to login a user who is not register.', async() => {
+    const res = await request(app).post('/api/user/login').send({
+      'email': 'janedoe@gmail.com',
+      'password': '123456789',
+    })
+    expect(res.statusCode).to.equal(400)
+    expect(res.body.message.message).to.equal('User not found. Please Sign Up to proceed')
+  })
+
 })
