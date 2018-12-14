@@ -1,9 +1,9 @@
 const userController = require('../controllers/user.controller')
-const authValidator = require('../validators/auth.middleware')
-const passport = require('passport')
-const jwt = require('jsonwebtoken')
+const {validateAuth, validateLogin} = require('../validators/inputValidator.middleware')
+// const passport = require('passport')
 
 module.exports = (app) => {
-  app.post('/api/user/register', authValidator.validateAuth, userController.register)
-  app.post('/api/user/login', authValidator.validateAuth, userController.login)
+  app.post('/api/user/register', validateAuth, userController.register)
+  app.post('/api/user/login', validateLogin, userController.login)
+  // app.post('/api/user/verify', userController.verify)
 }
