@@ -8,20 +8,16 @@ const expect = chai.expect
 describe('## Create User Account', () => {
   beforeEach(async () => {
     await User.create({
-      'username': 'janedoe',
       'email': 'janedoe@gmail.com',
       'password': '123456789'
     })
   })
-
   afterEach(async() => {
     await mongoose.connection.db.dropDatabase()
   })
-
   it('should respond with a 201', async() => {
     const userData = {
-      username: 'babu150',
-      email: 'babu150@gmail.com',
+      email: 'babe150@gmail.com',
       password: '12345678ddd'
     }
     const res = await request(app)
@@ -33,7 +29,6 @@ describe('## Create User Account', () => {
 
   it('should respond with "Invalid Password" if invalid Password is used', async() => {
     const userData = {
-      'username': 'janedoe',
       'email': 'janedoe@gmail.com',
       'password': ''
     }
@@ -46,7 +41,6 @@ describe('## Create User Account', () => {
 
   it('should respond with "invalid email" if invalid email is used', async() => {
     const userData = {
-      'username': 'janedoe',
       'email': 'janedoegmailcom',
       'password': '123456789'
     }
@@ -61,7 +55,6 @@ describe('## Create User Account', () => {
     const res = await request(app)
       .post('/api/user/register')
       .send({
-        'username': 'janedoe',
         'email': 'janedoe@gmail.com',
         'password': '123456789'
       })
@@ -73,7 +66,6 @@ describe('## Create User Account', () => {
 describe('## User Account logging', () => {
   beforeEach(async() => {
     await User.create({
-      'username': 'johndoe',
       'email': 'johndoe@gmail.com',
       'password': '123456789'
     })

@@ -9,13 +9,13 @@ const app = express()
 const expressValidator = require('express-validator')
 
 // connect to the db
-mongoose.connect(config.url, { useNewUrlParser: true })
+mongoose.connect(config.url)
 mongoose.Promise = global.Promise
 const db = mongoose.connection
 db.on('error', console.error.bind(
   console, 'Failed to connect to db...'))
 db.once('open', function callback() {
-  console.log('Successfully connected to db.')
+  console.log('Successfully connected to db...')
 })
 require('./auth/auth')
 // set middleware
@@ -27,8 +27,5 @@ app.use(expressValidator())
 app.get('/', async(req, res) => res.send('It works'))
 
 require('./routes/user.routes')(app)
-require('./routes/cheatsheet.routes')(app)
-require('./routes/command.routes')(app)
-
 
 module.exports = app
