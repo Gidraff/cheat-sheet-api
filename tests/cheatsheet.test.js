@@ -27,7 +27,8 @@ describe('CheatSheet tests', () => {
   })
 
   afterEach(async() => {
-    await mongoose.connection.db.dropDatabase()
+    await mongoose.connection
+      .db.dropDatabase()
   })
 
   describe('POST /user/cheats', () => {
@@ -38,7 +39,8 @@ describe('CheatSheet tests', () => {
         .send({title: 'qwerty'})
       expect(res.statusCode).to.equal(201)
       expect(res.type).to.equal('application/json')
-      expect(res.body.message).to.equal('Cheat Sheet successfully created')
+      expect(res.body.message).to
+        .equal('Cheat Sheet successfully created')
     })
 
     it('should respond with 409 when a duplicate Cheat Sheet is created', async () => {
@@ -52,7 +54,8 @@ describe('CheatSheet tests', () => {
         .send({title: 'Configurations'})
       expect(res.statusCode).to.equal(409)
       expect(res.type).to.equal('application/json')
-      expect(res.body.message).to.equal('Cheat Sheet with Configurations already exists')
+      expect(res.body.message).to
+        .equal('Cheat Sheet with Configurations already exists')
     })
 
     it('should respond with 400 if CheatSheet is null', async () => {
@@ -124,7 +127,8 @@ describe('CheatSheet tests', () => {
         .set('Authorization', 'Bearer ' + token)
 
       expect(deleteRes.statusCode).to.equal(200)
-      expect(resBeforeDelete.body.docs.length - resAfterDelete.body.docs.length).to.equal(1)
+      expect(resBeforeDelete.body.docs.length - resAfterDelete.body.docs.length)
+        .to.equal(1)
       expect(deleteRes.body.message).to.equal('Successfully deleted')
     })
   })

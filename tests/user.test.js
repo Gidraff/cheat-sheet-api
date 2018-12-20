@@ -28,7 +28,8 @@ describe('## Create User Account', () => {
       .post('/api/user/register')
       .send(userData)
     expect(res.statusCode).to.equal(201)
-    expect(res.body.message).to.equal('Account was successfully created')
+    expect(res.body.message).to
+      .equal('Account was successfully created')
   })
 
   it('should respond with "Invalid Password" if invalid Password is used', async() => {
@@ -80,7 +81,8 @@ describe('## User Account logging', () => {
   })
 
   afterEach(async() => {
-    await mongoose.connection.db.dropDatabase()
+    await mongoose.connection
+      .db.dropDatabase()
   })
 
   it('fails to login a user who is not register.', async() => {
@@ -89,7 +91,8 @@ describe('## User Account logging', () => {
       'password': '123456789',
     })
     expect(res.statusCode).to.equal(400)
-    expect(res.body.message.message).to.equal('User not found. Please Sign Up to proceed')
+    expect(res.body.message.message).to
+      .equal('User not found. Please Sign Up to proceed')
   })
 
 })

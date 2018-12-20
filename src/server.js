@@ -9,7 +9,7 @@ const app = express()
 const expressValidator = require('express-validator')
 
 // connect to the db
-mongoose.connect(config.url, { useNewUrlParser: true })
+mongoose.connect(config.url, {useNewUrlParser: true})
 mongoose.Promise = global.Promise
 const db = mongoose.connection
 db.on('error', console.error.bind(
@@ -24,7 +24,7 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(expressValidator())
-app.get('/', async(req, res) => res.send('It works'))
+app.get('/', async (req, res) => res.send('It works'))
 
 require('./routes/user.routes')(app)
 require('./routes/cheatsheet.routes')(app)
