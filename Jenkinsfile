@@ -5,12 +5,14 @@ pipeline {
             steps {
                 git 'https://github.com/Gidraff/cheat-sheet-api.git'
             }
-        },
+        }
+
         stage('Install dependencies') {
             steps {
                 sh 'npm install'
             }
-        },
+        }
+
         stage('test') {
             steps {
                 sh 'npm test'
