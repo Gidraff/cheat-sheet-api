@@ -6,8 +6,14 @@ const _ = require('lodash')
 exports.addCommand = async (req, res, next) => {
   try {
 
-    req.checkBody('description', 'The description not valid').notEmpty().trim().isLength({ min: 5})
-    req.checkBody('command', 'The command not valid').notEmpty().trim().isLength({ min: 5})
+    req.checkBody('description', 'The description not valid')
+      .notEmpty()
+      .trim()
+      .isLength({ min: 5})
+    req.checkBody('command', 'The command not valid')
+      .notEmpty()
+      .trim()
+      .isLength({ min: 5})
 
     const errors = req.validationErrors()
     if (errors && errors.length > 0) {
@@ -17,11 +23,12 @@ exports.addCommand = async (req, res, next) => {
     }
 
     const { description, command } = req.body
-    const checkIfCommandExist = await Command.findOne({
-      description,
-      command,
-      cheatId: req.params.cheatId
-    })
+    const checkIfCommandExist = await Command
+      .findOne({
+        description,
+        command,
+        cheatId: req.params.cheatId
+      })
 
     if(checkIfCommandExist) {
       return res.status(409).send({
@@ -31,7 +38,10 @@ exports.addCommand = async (req, res, next) => {
     }
 
     const newCommand = new Command(req.body)
-    const cheatSheet = await CheatSheet.findById(req.params.cheatId)
+    const cheatSheet = await CheatSheet
+      .findById(
+        req.params.cheatId
+      )
     if(!cheatSheet) {
       return res.status(404).json({
         status: false,
@@ -50,14 +60,14 @@ exports.addCommand = async (req, res, next) => {
     })
     next()
   } catch (e) {
-    next()
+    next(e)
   }
 }
 
 exports.getAllCommands = async (req, res, next) => {
   try {
     const pageNo = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 10
+    const limit = parseInt(req.query.limit) || 20
 
     const options = {
       page: pageNo,
@@ -71,7 +81,6 @@ exports.getAllCommands = async (req, res, next) => {
         options
       )
     return res.json(commands)
-    next()
   } catch (e) {
     next(e)
   }
@@ -88,15 +97,22 @@ exports.getOneCommand = async (req, res, next) => {
     })
     next()
   } catch (e) {
-    next()
+    next(e)
   }
 }
 
-
 exports.updateCommand = async (req, res, next) => {
   try {
-    req.checkBody('description', 'The description not valid').notEmpty().trim().isLength({ min: 5})
-    req.checkBody('command', 'The command not valid').notEmpty().trim().isLength({ min: 5})
+    req.checkBody('description', 'The description not valid')
+      .notEmpty()
+      .trim()
+      .isLength({ min: 5})
+
+    req.checkBody('command', 'The command not valid')
+      .notEmpty()
+      .trim()
+      .isLength({ min: 5})
+
     const errors = req.validationErrors()
     if (errors && errors.length > 0) {
       const response = _.uniqBy(errors, 'msg')
@@ -105,11 +121,12 @@ exports.updateCommand = async (req, res, next) => {
     }
 
     const { description, command } = req.body
-    const checkIfCommandExist = await Command.findOne({
-      description,
-      command,
-      cheatId: req.params.cheatId
-    })
+    const checkIfCommandExist = await Command
+      .findOne({
+        description,
+        command,
+        cheatId: req.params.cheatId
+      })
 
     if(checkIfCommandExist) {
       return res.status(409).send({
@@ -119,11 +136,12 @@ exports.updateCommand = async (req, res, next) => {
     }
 
 
-    const updatedCommand = await Command.findByIdAndUpdate(
-      req.params.commandId,
-      req.body,
-      {new: true}
-    )
+    const updatedCommand = await Command
+      .findByIdAndUpdate(
+        req.params.commandId,
+        req.body,
+        {new: true}
+      )
     if(updatedCommand) {
       return res.json(updatedCommand)
     }
@@ -136,7 +154,6 @@ exports.updateCommand = async (req, res, next) => {
     next(e)
   }
 }
-
 
 exports.deleteCommand = async (req, res, next) => {
   try {

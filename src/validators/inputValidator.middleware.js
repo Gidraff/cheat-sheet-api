@@ -2,9 +2,17 @@ const _ = require('lodash')
 
 exports.validateAuth = (req, res, next) => {
   // checks if req.body is valid
-  req.checkBody('username', 'Invalid Username').notEmpty().trim().isLength({ min: 5})
-  req.checkBody('email', 'Invalid Email').notEmpty().isEmail()
-  req.checkBody('password', 'Invalid Password').notEmpty().trim().isLength({min: 6})
+  req.checkBody('username', 'Invalid Username')
+    .notEmpty()
+    .trim()
+    .isLength({ min: 5})
+  req.checkBody('email', 'Invalid Email')
+    .notEmpty()
+    .isEmail()
+  req.checkBody('password', 'Invalid Password')
+    .notEmpty()
+    .trim()
+    .isLength({min: 6})
 
   const errors = req.validationErrors()
   if (errors && errors.length > 0) {
@@ -17,8 +25,13 @@ exports.validateAuth = (req, res, next) => {
 
 exports.validateLogin = (req, res, next) => {
   // checks if req.body is valid
-  req.checkBody('email', 'Invalid Email').notEmpty().isEmail()
-  req.checkBody('password', 'Invalid Password').notEmpty().trim().isLength({min: 6})
+  req.checkBody('email', 'Invalid Email')
+    .notEmpty()
+    .isEmail()
+  req.checkBody('password', 'Invalid Password')
+    .notEmpty()
+    .trim()
+    .isLength({min: 6})
 
   const errors = req.validationErrors()
   if (errors && errors.length > 0) {
@@ -33,7 +46,10 @@ exports.validateLogin = (req, res, next) => {
 }
 
 exports.validateCheat = (req, res, next) => {
-  req.checkBody('title', 'The Title is not valid').notEmpty().trim().isLength({ min: 5})
+  req.checkBody('title', 'The Title is not valid')
+    .notEmpty()
+    .trim()
+    .isLength({ min: 5})
   const errors = req.validationErrors()
   if (errors && errors.length > 0) {
     const response = _.uniqBy(errors, 'msg')

@@ -10,7 +10,10 @@ exports.addCheatSheet = async (req, res, next) => {
       })
     }
 
-    req.checkBody('title', 'The Title is not valid').notEmpty().trim().isLength({ min: 5})
+    req.checkBody('title', 'The Title is not valid')
+      .notEmpty()
+      .trim()
+      .isLength({ min: 5})
     const errors = req.validationErrors()
     if (errors && errors.length > 0) {
       const response = _.uniqBy(errors, 'msg')
@@ -19,7 +22,8 @@ exports.addCheatSheet = async (req, res, next) => {
     }
 
     const { title } = req.body
-    const checkIfCheatSheetExist = await CheatSheet.findOne({title, createdBy: req.user.id})
+    const checkIfCheatSheetExist = await CheatSheet
+      .findOne({title, createdBy: req.user.id})
     if(checkIfCheatSheetExist) {
       return res.status(409).send({
         message: `Cheat Sheet with ${req.body.title} already exists`
@@ -27,13 +31,13 @@ exports.addCheatSheet = async (req, res, next) => {
     }
 
     const newCheat = new CheatSheet(req.body)
-    const user = await User.findById(req.user.id)
+    const user = await User
+      .findById(req.user.id)
 
     newCheat.createdBy = user._id
     await newCheat.save()
     user.cheats.push(newCheat)
     await user.save()
-
 
     res.status(201).send({
       message: 'Cheat Sheet successfully created',
@@ -47,7 +51,7 @@ exports.addCheatSheet = async (req, res, next) => {
 exports.getAllCheatSheets = async (req, res, next) => {
   try {
     const pageNo = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 12
+    const limit = parseInt(req.query.limit) || 100
 
     const options = {
       page: pageNo,
@@ -91,7 +95,9 @@ exports.updateCheatSheet = async (req, res, next) => {
       })
     }
 
-    req.checkBody('title', 'The Title is not valid').notEmpty().trim().isLength({ min: 5})
+    req.checkBody('title', 'The Title is not valid')
+      .notEmpty().trim().isLength({ min: 5})
+
     const errors = req.validationErrors()
     if (errors && errors.length > 0) {
       const response = _.uniqBy(errors, 'msg')
@@ -100,18 +106,20 @@ exports.updateCheatSheet = async (req, res, next) => {
     }
 
     const { title } = req.body
-    const checkIfCheatSheetExist = await CheatSheet.findOne({title, createdBy: req.user.id})
+    const checkIfCheatSheetExist = await CheatSheet
+      .findOne({title, createdBy: req.user.id})
     if(checkIfCheatSheetExist) {
       return res.status(409).send({
         message: `Cheat Sheet with ${req.body.title} already exists`
       })
     }
 
-    const updatedCheatSheet = await CheatSheet.findByIdAndUpdate(
-      req.params.cheatId,
-      req.body,
-      {new: true}
-    )
+    const updatedCheatSheet = await CheatSheet
+      .findByIdAndUpdate(
+        req.params.cheatId,
+        req.body,
+        {new: true}
+      )
     if(updatedCheatSheet) {
       return res.json(updatedCheatSheet)
     }
@@ -127,7 +135,8 @@ exports.updateCheatSheet = async (req, res, next) => {
 
 exports.deleteCheatSheet = async (req, res, next) => {
   try {
-    const checkIfCheatIsDeleted = await CheatSheet.findByIdAndRemove(req.params.cheatId)
+    const checkIfCheatIsDeleted = await CheatSheet
+      .findByIdAndRemove(req.params.cheatId)
     if(checkIfCheatIsDeleted) return res.json({
       status: true,
       message: 'Successfully deleted'
