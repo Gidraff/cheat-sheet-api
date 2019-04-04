@@ -10,9 +10,3 @@ services:
             - "8000:8000"
         depends_on:
             - db
-    frontend:
-        image: cheat-frontend:02
-        ports:
-            - "3000:80"
-        depends_on:
-            - backend
