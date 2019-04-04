@@ -3,7 +3,17 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'npm --version'
+                git 'https://github.com/Gidraff/cheat-sheet-api.git'
+            }
+        },
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        },
+        stage('test') {
+            steps {
+                sh 'npm test'
             }
         }
     }
