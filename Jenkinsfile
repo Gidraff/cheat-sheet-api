@@ -1,9 +1,9 @@
 pipeline {
     agent { docker { image 'node:10.10.0' } }
     stages {
-        stage('build') {
+        stage('Clone repo') {
             steps {
-                git 'https://github.com/Gidraff/cheat-sheet-api.git'
+                git 'https://github.com/Gidraff/cheat-sheet-api'
             }
         }
 
