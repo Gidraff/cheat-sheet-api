@@ -1,5 +1,8 @@
 pipeline {
-    agent { docker { image 'node:10.10.0' } }
+    agent { docker {
+        image 'node:10.10.0'
+        args '-u root:root'
+        } }
     stages {
         stage('Clone repo') {
             steps {
