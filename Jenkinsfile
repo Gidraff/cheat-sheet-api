@@ -9,6 +9,7 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
+                sh 'npm install -g npm@latest'
                 sh 'npm install'
             }
         }
