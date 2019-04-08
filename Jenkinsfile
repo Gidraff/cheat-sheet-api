@@ -3,10 +3,13 @@ pipeline {
         image 'node:10.10.0'
         args '-u root:root'
         } }
+    parameters {
+        string(defaultValue: "develop", description: "Branch Specifier", name: "SPECIFIER")
+    }
     stages {
-        stage('Clone repo') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/Gidraff/cheat-sheet-api'
+                git branch: "${params.SPECIFIER}", url: 'https://github.com/Gidraff/cheat-sheet-api.git'
             }
         }
 
@@ -24,3 +27,4 @@ pipeline {
         }
     }
 }
+
