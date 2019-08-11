@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix .",
-    "test": "NODE_ENV=testing mocha --timeout 5000 ./tests/**/*.js",
+    "test": "NODE_ENV=testing mocha --timeout 5000 --exit ./tests/**/*.js",
     "coverage": "NODE_ENV=testing jest --coverage && cat ./coverage/lcov.info | coveralls",
     "start:dev": "NODE_ENV=development nodemon ./src/index.js",
     "start": "NODE_ENV=production node ./src/index.js"
