@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/Gidraff/cheat-sheet-api.svg?style=svg)](https://circleci.com/gh/Gidraff/cheat-sheet-api)[![Coverage Status](https://coveralls.io/repos/github/Gidraff/cheat-sheet-api/badge.svg)](https://coveralls.io/github/Gidraff/cheat-sheet-api)
+[![CircleCI](https://circleci.com/gh/Gidraff/cheat-sheet-api/tree/develop.svg?style=svg)](https://circleci.com/gh/Gidraff/cheat-sheet-api/tree/develop)[![Coverage Status](https://coveralls.io/repos/github/Gidraff/cheat-sheet-api/badge.svg)](https://coveralls.io/github/Gidraff/cheat-sheet-api)
 # cheat-sheet-api
 
 Cheat Sheet API allows you to to CRUD operations by exposing the following endpoints:
