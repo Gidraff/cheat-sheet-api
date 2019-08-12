@@ -1,37 +1,102 @@
+default: &defaults
+  working_directory: ~/application
+  docker:
+    - image: circleci/node:10.10.0
+    - image: mongo:4.0.2
+
+# commands
+cmd_restore_cache: &cmd_restore_cache
+  restore_cache:
+    keys:
+      - v1-dependencies-{{ checksum "package.json" }}
+      - v1-dependencies-
+
+cmd_save_cache: &cmd_save_cache
+  save_cache:
+    paths:
+      - node_modules
+    key: v1-dependencies-{{ checksum "package.json" }}
+
+cmd_update_npm: &cmd_update_npm
+  run:
+    name: Update npm
+    command: 'sudo npm install -g npm@latest'
+
+cmd_install_dependencies: &cmd_install_dependencies
+  run:
+    name: Install Dependencies
+    command: npm install
+
+cmd_run_test: &cmd_run_test
+  run:
+    name: Run Test
+    command: npm test
+
+cmd_setup_google_sdk: &cmd_setup_google_sdk
+  run:
+    name: Set up Google sdk
+    command: |
+        apt-get install -qq -y gettext
+        chmod +x ./scripts/setup_google_sdk.sh && \
+            ./scripts/setup_google_sdk.sh
+
+cmd_build_publish_image: &cmd_build_publish_image
+  run:
+    name: Docker build and publish
+    command: |
+        chmod +x ./scripts/build_publish.sh && \
+            ./scripts/build_publish.sh
+
+cmd_deploy_to_kubernetes: &cmd_deploy_to_kubernetes
+  run:
+    name: Deploy to Kubernetes
+    command: |
+        chmod +x ./scripts/deploy.sh && \
+            ./scripts/deploy.sh
+
+
 version: 2
 jobs:
   build:
-    working_directory: ~/cheatsheet-api
-    docker:
-      - image: circleci/node:8.12.0
-      - image: mongo:4.0.2
+    <<: *defaults
     steps:
       - checkout
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+      - *cmd_restore_cache
+      - *cmd_update_npm
+      - *cmd_install_dependencies
+      - *cmd_save_cache
 
-      - run:
-          name: install-update
-          command: npm install
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - *cmd_restore_cache
+      - *cmd_update_npm
+      - *cmd_install_dependencies
+      - *cmd_run_test
+      - *cmd_save_cache
 
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run:
-          name: test
-          command: npm test
-      - run:
-          name: code-coverage
-          command: npm run coverage
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
-      - store_test_results:
-          path: test-results.xml
+  deploy_to_staging:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - *cmd_setup_google_sdk
+      - *cmd_build_publish_image
+      - *cmd_deploy_to_kubernetes
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build
+    - test:
+          requires:
+            - build
+    - deploy_to_staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop

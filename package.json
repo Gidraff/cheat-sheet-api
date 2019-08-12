@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix .",
-    "test": "NODE_ENV=testing mocha --timeout 5000 ./tests/**/*.js",
+    "test": "NODE_ENV=testing mocha --timeout 5000 --exit ./tests/**/*.js",
     "coverage": "NODE_ENV=testing jest --coverage && cat ./coverage/lcov.info | coveralls",
     "start:dev": "NODE_ENV=development nodemon ./src/index.js",
     "start": "NODE_ENV=production node ./src/index.js"
@@ -32,8 +32,8 @@
     "express-jwt": "^5.3.1",
     "express-validator": "^5.3.0",
     "jsonwebtoken": "^8.4.0",
-    "lodash": "^4.17.11",
-    "mongoose": "^5.2.8",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.6.9",
     "mongoose-paginate": "^5.0.3",
     "morgan": "^1.9.1",
     "nodemailer": "^4.7.0",
