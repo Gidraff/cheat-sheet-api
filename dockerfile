@@ -9,6 +9,6 @@ RUN npm install --silent
 
 RUN npm install bcrypt
 
-EXPOSE 8000
+EXPOSE 80
 
 CMD ["npm", "start"]
