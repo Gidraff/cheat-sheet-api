@@ -7,7 +7,7 @@ const getEnv = () => {
     case 'production':
       return {
         name: 'MongoDB Service',
-        url: 'mongodb+srv://dbCheatSheetUser:dbCheatSheetUser@mern-cluster1-lggts.gcp.mongodb.net/test?retryWrites=true&w=majority',
+        url: 'mongodb://dbCheatSheetUser:cheat123@cheat-sheet-app-shard-00-00-lggts.gcp.mongodb.net:27017,cheat-sheet-app-shard-00-01-lggts.gcp.mongodb.net:27017,cheat-sheet-app-shard-00-02-lggts.gcp.mongodb.net:27017/test?ssl=true&replicaSet=cheat-sheet-app-shard-0&authSource=admin&retryWrites=true&w=majority',
         port: process.env.MONGODB_PORT
       }
     default:
